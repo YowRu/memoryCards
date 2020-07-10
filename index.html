@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <title>Document</title>
+    <style>
+        @import url(http://fonts.googleapis.com/earlyaccess/cwtexhei.css);
+        /*font-family: 'cwTeXHei', sans-serif;黑體*/
+        
+        @import url(http://fonts.googleapis.com/earlyaccess/cwtexkai.css);
+        /*font-family: 'cwTeXKai', serif;楷體*/
+        
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: '微軟正黑體', 'Microsoft JhengHei', 'cwTeXHei', sans-serif;
+        }
+        
+        body {
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('./img/bg.png') no-repeat center;
+            background-size: cover;
+        }
+        
+        .frame {
+           
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            position: relative;
+        }
+        
+        .up {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 13px;
+            margin-bottom: 13px;
+        }
+        
+        #afresh,.start {
+            font-weight: bolder;
+            font-size: 2rem;
+            color: #fff;
+            width: 130px;
+            padding: 10px 0;
+            border-radius: 3px;
+            position: absolute;
+            top: 1%;
+            right: 1%;
+            background-color: #2f3333;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1;
+        }
+        #afresh{top:80%;right:45%;display:none;font-size: 2.5rem;width: 200px;background-color: rgba(0, 255, 255, 0.62);
+            color: #fff;
+            text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,2px 2px 2px aqua;
+z-index:2; }
+        .start{
+               position: absolute;
+               top: 70%;
+               right:45%;
+               height:40px;
+               line-height: 40px;
+                   color: #0C265C;
+    background-color: #fff;
+        }
+        .start:hover{
+            color: #fff;
+            text-shadow:-1px -1px 0 #506FAC,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,2px 2px 2px #506FAC;
+            background-color: #506FAC;
+        }
+        #afresh:hover {background-color: #506FAC;}
+        .sectionWP {
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            padding: 2.2% 0 1%;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('./img/border.png') no-repeat center;
+            background-size: contain;
+            margin-top: -32px;
+        }
+        section {
+            width: 80%;
+            margin: 0 auto;
+            padding: 2.2% 0 1%;
+            box-sizing: border-box;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-top: 32px;
+        }
+        
+        .cardWp {
+            width: 80%;
+            height: 88%;
+            margin: 0 auto;
+            padding-top: 1%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .card {
+            width: 20%;
+            margin: 1%;
+            position: relative;
+        }
+        
+        .front {
+            width: 100%;
+            height: 100%;
+            background: url('./img/card.png') no-repeat center;
+            background-size: contain;
+        }
+        
+        .back {
+            width: 100%;
+            height: 100%;
+            transition: 0.3s linear;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .click {
+            transform: rotateY(180deg);
+        }
+        
+        .text {
+            position: absolute;
+            width: 80%;
+            height: 100vh;
+            background: url('./img/text.png') no-repeat center;
+            background-size: contain;
+            z-index: 1;
+        }
+        
+        #score,
+        #time,#time2 {
+            width: 100px;
+            height: 60px;
+            text-align: center;
+            line-height: 60px;
+            font-size: 3rem;
+            position: relative;
+        }
+        #time2{display: none;}
+        .up>div {
+            margin: 0 5%;
+            background-color: rgba(255, 255, 255, 0.65);
+            background-color:#262B36;
+            color: #fff;
+            border-radius: 3px;
+            padding-top: 11px;
+        }
+        
+        .win,
+        .loss {
+            display: none;
+            position: absolute;
+            width:80%;z-index: 2;
+        }
+        .loss{width: auto; height: 50%;}
+        .bg{background-color: rgba(0, 0, 0, 0.67);width:100%;height:100%;position: absolute;
+z-index:1;display: none;}
+    </style>
+</head>
+
+<body>
+    <div class="frame">
+        <div id="afresh">↻ 完成</div>
+        <div class="up">
+            <div>計時
+                <div id="time"></div>
+                <div id="time2"></div>
+            </div>
+        </div>
+        <div class="text">
+            <div class="start">開始</div>
+        </div>
+        <div class="sectionWP"><section></section></div> 
+        <div class="bg"></div>
+        <img src="img/loss.png" alt="loss" class="loss"> 
+        <img src="img/win.png" alt="win" class="win"> </div>
+    <script>
+        
+        let score = 0;
+        //卡片 
+        function cards(){
+        for (i = 0; i < 12; i++) {
+            $("section").append('<div class="card"><div class="front"></div><div class="back"></div></div>');
+        }
+        //  隨機取數不重複
+        var arr = [];
+        for (i = 0; i < 12; i++) {
+            arr[i] = i + 1;
+        }
+        var A = new Array(12);
+
+        function ans() {
+            var x;
+            for (i = 1; i < 13; i++) {
+                //這邊記得要用 -i，元素每取走一個，就少一個。
+                x = Math.floor(Math.random() * (13 - i))
+                A[i - 1] = arr.splice(x, 1);
+                //同組
+                var num = (A[i - 1] % 4);
+                $('.card').eq(i - 1).find('.back').attr('data-card', num).css({
+                    'background': 'url("./img/' + A[i - 1] + '.png") no-repeat center'
+                    , 'background-size': 'contain'
+                    , 'transform': 'rotateY(0deg)'
+                });
+            }
+            return A;
+            console.log(A);
+        }
+        ans();
+            }
+        cards();
+        //start
+        $('.start').click(function(){
+            //alert($('.card').length);
+            //說明字消失
+            $('.text').css({
+                    'display': 'none'
+                });
+            cards();
+            showTime();
+        });
+        //十五秒倒數
+        var T = 15;
+        function showTime15() {
+            Frozen = setTimeout("showTime15()", 1000);
+            T -= 1;
+            document.getElementById('time2').innerHTML = T;
+            
+            if (T == 14) {
+                //點選
+                    $('.card').click(function () {
+                        $(this).find('.front').css({
+                            'transform': 'rotateY(180deg)'
+                            , 'opacity': '0'
+                        });
+                        $(this).find('.back').addClass('open').css({
+                            'transform': 'rotateY(0deg)'
+                            , 'opacity': '1'
+                        });
+                        //按下2張
+                        if ($('.open').length == 2) {
+                            //是否同組
+                            if ($('.open').eq(0).attr('data-card') != $('.open').eq(1).attr('data-card')) {
+                                //翻牌 
+                                $('.back.open').css({
+                                    'transform': 'rotateY(0deg)'
+                                    , 'opacity': '1'
+                                });
+                                $('.back.open').siblings('.front').css({
+                                    'transform': 'rotateY(180deg)'
+                                    , 'opacity': '0'
+                                });
+                                clearTimeout(Frozen);
+                                function loss(){
+                                    $('.loss').show(1200);
+                                    $('.bg').show(1000);
+                                    $('#afresh').show(1200);
+                                }
+                                setTimeout(loss(),3000);
+                                
+                            }
+                        }
+                        //按下三張
+                        if ($('.open').length == 3) {
+                            console.log($('.open').eq(0).attr('data-card'));
+                            console.log($('.open').eq(1).attr('data-card'));
+                            console.log($('.open').eq(2).attr('data-card'));
+                            
+                            //是否同組
+                            if ($('.open').eq(0).attr('data-card') == $('.open').eq(1).attr('data-card') && $('.open').eq(0).attr('data-card') == $('.open').eq(2).attr('data-card')) {
+                                $('.open').removeClass('open').addClass('complet');
+                                clearTimeout(Frozen);
+                                function win(){
+                                    $('.win').show(1200);
+                                    $('.bg').show(1000);
+                                    $('#afresh').show(1200);
+                                }
+                                setTimeout(win(),3500);
+                            }
+                            if ($('.open').eq(0).attr('data-card') != $('.open').eq(1).attr('data-card') || $('.open').eq(0).attr('data-card') != $('.open').eq(2).attr('data-card') || $('.open').eq(2).attr('data-card') != $('.open').eq(1).attr('data-card')) {
+                                //翻牌 
+                                $('.back.open').css({
+                                    'transform': 'rotateY(0deg)'
+                                    , 'opacity': '1'
+                                });
+                                $('.back.open').siblings('.front').css({
+                                    'transform': 'rotateY(180deg)'
+                                    , 'opacity': '0'
+                                });
+                                clearTimeout(Frozen);
+                                function loss(){
+                                    $('.loss').show(1200);
+                                    $('.bg').show(1000);
+                                    $('#afresh').show(1200);
+                                }
+                                setTimeout(loss(), 3500 );
+                                
+                                
+                            }
+                            
+                        }
+                    });
+                } 
+            if (T == 0) {
+                window.clearTimeout(Frozen);//去掉定时器 
+                function loss(){
+                    $('.loss').show();
+                    $('.bg').show();
+                    $('#afresh').show();
+                }
+                setTimeout(loss(), 3000 );
+            }
+        }
+        //五秒倒數
+        var t = 5;
+
+        function showTime() {
+            //每秒執行一次,showTime()
+            stop = setTimeout("showTime()", 1000);
+            t -= 1;
+            document.getElementById('time').innerHTML = t;
+            
+            //掀牌
+            if (t == 0) {
+                //蓋牌
+                $('.card').find('.back').css({
+                    'transform': 'rotateY(180deg)'
+                    , 'opacity': '0'
+                });
+                $('#time').hide();
+                $('#time2').show();
+                clearTimeout(stop);
+                showTime15();
+                
+            }
+            
+        }
+        
+        //重新
+        $('#afresh').click(function () {
+            window.location.reload();
+        });
+        //版面配置
+        var H = $(window).height();
+        $('body').height(H);
+        $('.frame').height(H);
+        var h=$('.up').height();
+        $('.card').height(H / 4.5);
+        $('.sectionWP').height(H-h);
+    </script>
+</body>
+
+</html>
